@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+/*import 'package:flutter/foundation.dart';
 import '../notification/notification_channel.dart';
 
 class Notification {
@@ -13,3 +13,4 @@ class Notification {
       required this.notificationBody,
       required this.channel});
 }
+*/

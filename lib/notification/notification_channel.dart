@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 
 class NotificationChannel {
   final String channelID;
@@ -8,9 +8,12 @@ class NotificationChannel {
   final bool hasSound;
 
   NotificationChannel(
-      {required this.channelID,
+      {
+      required this.channelID,
       required this.channelName,
       required this.channelDescription,
       required this.soundName,
-      required this.hasSound});
+      required this.hasSound
+      });
 }
+*/

@@ -44,24 +44,8 @@ void callbackDispatcher() {
           print('reschedule task');
           return false;
         }
-      case failedTaskKey:
-        print('failed task');
-        return Future.error('failed');
-      case simpleDelayedTask:
-        print("$simpleDelayedTask was executed");
-        break;
-      case simplePeriodicTask:
-        print("$simplePeriodicTask was executed");
-        break;
       case simplePeriodic1HourTask:
         print("$simplePeriodic1HourTask was executed");
-        break;
-      case Workmanager.iOSBackgroundTask:
-        print("The iOS background fetch was triggered");
-        Directory? tempDir = await getTemporaryDirectory();
-        String? tempPath = tempDir.path;
-        print(
-            "You can access other plugins in the background, for example Directory.getTemporaryDirectory(): $tempPath");
         break;
     }
 
@@ -74,24 +58,40 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
+List list = [
+  {
+    "v_hora_inicial": "13:00",
+    "v_hora_final": "15:00",
+    "v_num_dia": 2,
+    "v_dia": "Martes"
+  },
+  {
+    "v_hora_inicial": "14:00",
+    "v_hora_final": "15:00",
+    "v_num_dia": 5,
+    "v_dia": "Viernes"
+  }
+];
+final List<String> hourList =
+    list.map((h) => h["v_hora_inicial"].toString()).toList();
+
+int calculateRemainTimeInSeconds(String nextTime) {
+  DateTime _now = DateTime.now();
+  int _nowInSeconds = _now.hour * 3600 + _now.minute * 60 + _now.second;
+  List<String> untilTime = nextTime.split(":");
+  int hour = int.parse(untilTime[0]);
+  int minute = int.parse(untilTime[1]);
+  print("**********************HORA/MINUTO*************************");
+  print(hour);
+  print(minute);
+  return hour * 3600 + minute * 60 - _nowInSeconds;
+}
+
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    /* listDias:
-    [
-      {
-        "v_hora_inicial": "13:00",
-        "v_hora_final": "15:00",
-        "v_num_dia": 2,
-        "v_dia": "Martes"
-      },
-      {
-        "v_hora_inicial": "13:00",
-        "v_hora_final": "14:00",
-        "v_num_dia": 5,
-        "v_dia": "Viernes"
-      }
-    ];*/
+    print(hourList); //TRAE SOLO LA HORA
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -116,83 +116,19 @@ class _MyAppState extends State<MyApp> {
                     );
                   },
                 ),
-                SizedBox(height: 16),
-
-                //This task runs once.
-                //Most likely this will trigger immediately
-                ElevatedButton(
-                  child: Text("Register OneOff Task"),
-                  onPressed: () {
-                    Workmanager().registerOneOffTask(
-                      simpleTaskKey,
-                      simpleTaskKey,
-                      inputData: <String, dynamic>{
-                        'int': 1,
-                        'bool': true,
-                        'double': 1.0,
-                        'string': 'string',
-                        'array': [1, 2, 3],
-                      },
-                    );
-                  },
-                ),
-                /*ElevatedButton(
-                  child: Text("Register rescheduled Task"),
-                  onPressed: () {
-                    Workmanager().registerOneOffTask(
-                      rescheduledTaskKey,
-                      rescheduledTaskKey,
-                      inputData: <String, dynamic>{
-                        'key': Random().nextInt(64000),
-                      },
-                    );
-                  },
-                ),
-                ElevatedButton(
-                  child: Text("Register failed Task"),
-                  onPressed: () {
-                    Workmanager().registerOneOffTask(
-                      failedTaskKey,
-                      failedTaskKey,
-                    );
-                  },
-                ),*/
-                //This task runs once
-                //This wait at least 10 seconds before running
-                ElevatedButton(
-                    child: Text("Register Delayed OneOff Task"),
-                    onPressed: () {
-                      Workmanager().registerOneOffTask(
-                        simpleDelayedTask,
-                        simpleDelayedTask,
-                        initialDelay: Duration(seconds: 10),
-                      );
-                    }),
-                SizedBox(height: 8),
-                //This task runs periodically
-                //It will wait at least 10 seconds before its first launch
-                //Since we have not provided a frequency it will be the default 15 minutes
-                ElevatedButton(
-                    child: Text("Register Periodic Task (Android)"),
-                    onPressed: Platform.isAndroid
-                        ? () {
-                            Workmanager().registerPeriodicTask(
-                              simplePeriodicTask,
-                              simplePeriodicTask,
-                              initialDelay: Duration(seconds: 10),
-                            );
-                          }
-                        : null),
                 //This task runs periodically
                 //It will run about every hour
                 ElevatedButton(
-                    child: Text("Register 1 hru Periodic Task (Android)"),
+                    child: Text("Register 1 hr Periodic Task"),
                     onPressed: Platform.isAndroid
                         ? () {
                             Workmanager().registerPeriodicTask(
                               simplePeriodicTask,
                               simplePeriodic1HourTask,
-                              frequency: Duration(minutes: 15),
+                              //frequency: Duration(minutes: 15),
+                              initialDelay: Duration(
+                                  seconds: calculateRemainTimeInSeconds(
+                                      hourList.toString())),
                               /*backoffPolicy: BackoffPolicy.linear,
                               existingWorkPolicy: ExistingWorkPolicy.replace,
                               constraints: Constraints(
