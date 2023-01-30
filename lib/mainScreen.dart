@@ -31,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
     int calculateRemainTimeInSeconds(String horaInicial) {
       DateTime _now = DateTime.now();
       int _nowInSeconds =
-          _now.hour * num.parse(horaInicial) + _now.minute * 900 + _now.second;
+          _now.hour * int.parse(horaInicial) + _now.minute * 900 + _now.second;
       //segundos sumados
       List<String> untilTime = horaInicial.split(":");
 
