@@ -11,7 +11,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
-    List list = [
+    /*List list = [
       {
         "v_hora_inicial": "15:00",
         "v_hora_final": "16:00",
@@ -28,10 +28,9 @@ class _MainScreenState extends State<MainScreen> {
     final List<String> horaInicial =
         list.map((h) => h["v_hora_inicial"].toString()).toList();
 
-    int calculateRemainTimeInSeconds(String horaInicial) {
+      int calculateRemainTimeInSeconds(String horaInicial) {
       DateTime _now = DateTime.now();
-      int _nowInSeconds =
-          _now.hour * int.parse(horaInicial) + _now.minute * 900 + _now.second;
+      int _nowInSeconds = _now.hour * 1500 + _now.minute * 900 + _now.second;
       //segundos sumados
       List<String> untilTime = horaInicial.split(":");
 
@@ -39,16 +38,16 @@ class _MainScreenState extends State<MainScreen> {
       int minute = int.parse(untilTime[1]);
       if (hour > int.parse(horaInicial)) {
       } else {
-        if (minute == 45 || minute >= 45) {
-          //mensaje de alerta
-          callbackDispatcher();
-        }
+        //if (minute == 45 || minute >= 45) {
+        //mensaje de alerta
+        callbackDispatcher();
+        // }
       }
       print("**********************HORA/MINUTO*************************");
       print(hour);
       print(minute);
-      return hour * int.parse(horaInicial) + minute * 900 - _nowInSeconds;
-    }
+      return hour * 1500 + minute * 900 - _nowInSeconds;
+    }*/
 
     Workmanager().registerPeriodicTask(
       "1",
@@ -57,11 +56,6 @@ class _MainScreenState extends State<MainScreen> {
       initialDelay: Duration(seconds: 5),
     );
 
-    /*Workmanager().registerPeriodicTask(
-      "2",
-      "periodic Notification at 1 day",
-      frequency: Duration(days: 1),
-    );*/
     super.initState();
   }
 
